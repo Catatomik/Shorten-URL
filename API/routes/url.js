@@ -2,11 +2,13 @@ const router = require("express").Router()
 
 module.exports = (app) => {
     router.route("/:url")
+
         .get(async (req, res, next) => {
             const results = await app.db.collection('urls').find({ shortened: req.params.url }).toArray()
             res.send(results)
             next()
         })
+
         .post(async (req, res, next) => {
             if (!req.query.dest) return res.sendStatus(400)
             const dest = decodeURIComponent(req.query.dest)
@@ -21,6 +23,7 @@ module.exports = (app) => {
             }
             next()
         })
+
         .delete(async (req, res, next) => {
             try {
                 await app.db.collection('urls').deleteOne({ shortened: req.params.url })
@@ -30,6 +33,7 @@ module.exports = (app) => {
             }
             next()
         })
+        
     return {
         router,
         basePath: "/url"
