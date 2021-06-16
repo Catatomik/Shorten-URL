@@ -54,7 +54,7 @@ export default {
       adding.value = true
       
       try {
-        await API.post(`/url/${addShort.value}?dest=${encodeURIComponent(addUrl.value)}`)
+        await API.post(`/url/${addShort.value}`, { dest: addUrl.value })
         addShort.value = ""
         addUrl.value = ""
         fetch()

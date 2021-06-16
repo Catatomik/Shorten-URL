@@ -18,12 +18,11 @@ module.exports = (app) => {
         })
 
         .post(async (req, res, next) => {
-            if (!req.query.dest) return res.sendStatus(400)
-            const dest = decodeURIComponent(req.query.dest)
+            if (!req.body?.dest) return res.status(400).send({ status: 400, error: "No destination provided." })
             try {
                 await app.db.collection('urls').insertOne({
-                    shortened: req.params.url,
-                    dest: dest
+                    shortened: req.body.dest,
+                    dest: data.dest
                 })
                 res.status(200).send({ status: 200 })
             } catch(e) {
