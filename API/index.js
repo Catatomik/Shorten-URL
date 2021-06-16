@@ -31,5 +31,5 @@ const opts = {
    cert: fs.readFileSync(config.cert)
 };
 
-https.createServer(opts, app).listen(config.port);
+https.createServer(opts, app).listen(config.port, config.host);
 console.log(`Server started and listening on https://localhost:${config.port}.`)
