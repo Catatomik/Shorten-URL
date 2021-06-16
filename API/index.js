@@ -2,9 +2,11 @@ const express = require("express")
 const fs = require('fs');
 const https = require('https');
 const MongoClient = require('mongodb').MongoClient;
+var cors = require('cors')
 
 const config = require('../config.json').API
 const app = express()
+app.use(cors())
 app.use((req, res, next) => {
     console.info(`[${(new Date()).toLocaleString("FR-fr")}] Treating request ${req.method} "${req.originalUrl}".`)
     next()
