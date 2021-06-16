@@ -1,7 +1,8 @@
 import axios from 'axios'
+import { APIHost } from './config.json'
 
 const API = axios.create({
-    baseURL: 'https://localhost:3001/',
+    baseURL: APIHost,
     timeout: 1000,
     transformResponse: [function (data) {
         console.log(data)
