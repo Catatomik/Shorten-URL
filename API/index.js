@@ -32,4 +32,4 @@ const opts = {
 };
 
 https.createServer(opts, app).listen(config.port, config.host);
-console.log(`Server started and listening on https://localhost:${config.port}.`)
+console.log(`Server started and listening on https://${config.host}:${config.port}.`)
