@@ -1,6 +1,14 @@
 const router = require("express").Router()
 
 module.exports = (app) => {
+    router.route("/")
+    
+        .get(async (_, res, next) => {
+            const results = await app.db.collection('urls').find({}).toArray()
+            res.send(results)
+            next()
+        })
+
     router.route("/:url")
 
         .get(async (req, res, next) => {
@@ -17,19 +25,21 @@ module.exports = (app) => {
                     shortened: req.params.url,
                     dest: dest
                 })
-                res.sendStatus(200)
+                res.status(200).send({ status: 200 })
             } catch(e) {
-                res.sendStatus(500)
+                console.error(e)
+                res.status(500).send({ status: 500, error: e })
             }
             next()
         })
 
         .delete(async (req, res, next) => {
             try {
-                await app.db.collection('urls').deleteOne({ shortened: req.params.url })
-                res.sendStatus(200)
+                const r = await app.db.collection('urls').deleteOne({ shortened: req.params.url })
+                if (r.deletedCount == 0) throw new Error("No corresponding shortened URL found.")
+                res.status(200).send({ status: 200 })
             } catch(e) {
-                res.sendStatus(500)
+                res.status(500).send({ status: 500, error: e })
             }
             next()
         })
