@@ -6,7 +6,7 @@ const MongoClient = require('mongodb').MongoClient;
 const config = require('../config.json').API
 const app = express()
 app.use((req, res, next) => {
-    console.info(`[${(new Date()).toLocaleString("FR-fr")}] Treating request "${req.originalUrl}".`)
+    console.info(`[${(new Date()).toLocaleString("FR-fr")}] Treating request ${req.method} "${req.originalUrl}".`)
     next()
 })
 require('./routes')(app)
