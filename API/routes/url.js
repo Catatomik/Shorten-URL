@@ -21,8 +21,8 @@ module.exports = (app) => {
             if (!req.body?.dest) return res.status(400).send({ status: 400, error: "No destination provided." })
             try {
                 await app.db.collection('urls').insertOne({
-                    shortened: req.body.dest,
-                    dest: data.dest
+                    shortened: req.params.url,
+                    dest: req.body.dest
                 })
                 res.status(200).send({ status: 200 })
             } catch(e) {
