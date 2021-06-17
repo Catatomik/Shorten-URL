@@ -4,6 +4,9 @@ module.exports = (app) => {
     router.route("/")
     
         .get(async (_, res, next) => {
+
+            if (!req.body?.password || app.utils.sha256(req.body.password) != app.config.password) return res.status(401).send({ status: 401, error: "Authentication error." })
+
             const results = await app.db.collection('urls').find({}).toArray()
             res.send(results)
             next()
@@ -18,6 +21,9 @@ module.exports = (app) => {
         })
 
         .post(async (req, res, next) => {
+
+            if (!req.body?.password || app.utils.sha256(req.body.password) != app.config.password) return res.status(401).send({ status: 401, error: "Authentication error." })
+
             if (!req.body?.dest) return res.status(400).send({ status: 400, error: "No destination provided." })
             try {
                 await app.db.collection('urls').insertOne({
@@ -33,6 +39,9 @@ module.exports = (app) => {
         })
 
         .delete(async (req, res, next) => {
+
+            if (!req.body?.password || app.utils.sha256(req.body.password) != app.config.password) return res.status(401).send({ status: 401, error: "Authentication error." })
+
             try {
                 const r = await app.db.collection('urls').deleteOne({ shortened: req.params.url })
                 if (r.deletedCount == 0) throw new Error("No corresponding shortened URL found.")
