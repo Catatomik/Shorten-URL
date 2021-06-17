@@ -17,7 +17,7 @@ export default {
         API.get(`/url/${route.params.url}`)
             .then(r => {
                 r = r.data[0]
-                if (!r.dest) error.value = "No destination."
+                if (!r?.dest) error.value = "Unknow shortcut..."
                 else window.location = r.dest
             })
             .catch(e => {

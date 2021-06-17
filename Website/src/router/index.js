@@ -4,7 +4,7 @@ import redirUrl from '../components/redirUrl.vue'
 const routes = [
   {
     path: '/:url',
-    name: 'shortened-url',
+    name: 'Redirection...',
     component: redirUrl
   },
   {

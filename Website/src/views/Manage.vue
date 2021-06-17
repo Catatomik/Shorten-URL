@@ -1,26 +1,36 @@
 <template>
-  <div class="m-10 flex space-x-4">
-    <div class="flex-auto bg-blue-300 bg-opacity-30 rounded-md p-2">
-      <h1 class="font-sans font-semibold text-xl text-center mb-2">Liste des raccourcis ({{ shorteneds.length }})</h1>
-      <div class="flex space-x-4">
-        <div class="flex-auto">
-          <select size=15 class="w-max mr-5 inline-block" style="color: black;" v-model="selectedDisplay">
-            <option v-for="url of shorteneds" v-bind:key="url" :value="url">{{ url.shortened }}</option>
-          </select>
+  <div>
+    <div v-if="password.valid" class="m-10 flex space-x-4">
+      <div class="flex-auto bg-blue-300 bg-opacity-30 rounded-md p-2">
+        <h1 class="font-sans font-semibold text-xl text-center mb-2">Liste des raccourcis ({{ shorteneds.length }})</h1>
+        <div class="flex space-x-4">
+          <div class="flex-auto">
+            <select size=15 class="w-max mr-5 inline-block" style="color: black;" v-model="selectedDisplay">
+              <option v-for="url of shorteneds" v-bind:key="url" :value="url">{{ url.shortened }}</option>
+            </select>
+          </div>
+          <div class="flex-auto rounded-md bg-blue-300 text-gray-800 p-2">
+            <div class="flex-auto my-2">URL personnalisé : <a target="_blank" class="underline" :href="selectedDisplay.shortened">{{ selectedDisplay.shortened }}</a></div>
+            <div class="flex-auto my-2">URL cible : <a target="_blank" class="underline" :href="selectedDisplay.dest">{{ selectedDisplay.dest }}</a></div>
+            <button type="button" class="px-2 shadow-md rounded-md bg-red-300" :disabled="!selectedDisplay.shortened" @click="removeShortened">Supprimer</button>
+          </div>
         </div>
-        <div class="flex-auto rounded-md bg-blue-300 text-gray-800 p-2">
-          <div class="flex-auto my-2">URL personnalisé : <a target="_blank" class="underline" :href="selectedDisplay.shortened">{{ selectedDisplay.shortened }}</a></div>
-          <div class="flex-auto my-2">URL cible : <a target="_blank" class="underline" :href="selectedDisplay.dest">{{ selectedDisplay.dest }}</a></div>
-          <button type="button" class="px-2 shadow-md rounded-md bg-red-300" :disabled="adding" @click="removeShortened">Supprimer</button>
+        </div>
+      <div class="flex-auto bg-green-300 bg-opacity-30 rounded-md p-2">
+        <h1 class="font-sans font-semibold text-xl text-center mb-2">Ajouter un raccourci</h1>
+        <div class="block">
+          <div class="my-2">URL personnalisé : <input type="text" size=15 class="rounded-sm px-1 text-dark-800" v-model="addShort"/></div>
+          <div class="my-2">URL cible : <input type="text" size=70 class="rounded-sm px-1 text-dark" v-model="addUrl"/></div>
+          <button type="button" class="px-2 shadow-md rounded-md bg-green-700" :disabled="adding" @click="addShortened">Valider</button>
         </div>
       </div>
-      </div>
-    <div class="flex-auto bg-green-300 bg-opacity-30 rounded-md p-2">
-      <h1 class="font-sans font-semibold text-xl text-center mb-2">Ajouter un raccourci</h1>
-      <div class="block">
-        <div class="my-2">URL personnalisé : <input type="text" size=15 class="rounded-sm px-1 text-dark-800" v-model="addShort"/></div>
-        <div class="my-2">URL cible : <input type="text" size=70 class="rounded-sm px-1 text-dark" v-model="addUrl"/></div>
-        <button type="button" class="px-2 shadow-md rounded-md bg-green-700" :disabled="adding" @click="addShortened">Valider</button>
+    </div>
+    <div v-else class="flex items-center justify-center h-screen">
+      <div class="rounded-md bg-blue-300 text-gray-800 p-5">
+        <div class="block">
+          <div class="my-2">Mot de passe : <input type="password"  size=15 class="rounded-sm px-1 text-dark-800" v-model="password.value"/></div>
+          <button type="button" class="px-2 shadow-md rounded-md bg-opacity-50 bg-blue-700" :disabled="password.valid" @click="fetch">Valider</button>
+        </div>
       </div>
     </div>
   </div>
@@ -28,7 +38,7 @@
 
 <script>
 import { ref } from 'vue'
-import { API } from '../store'
+import { API, sha256 } from '../store'
 
 export default {
   name: "Manage",
@@ -44,32 +54,46 @@ export default {
 
     async function fetch() {
 
-      shorteneds.value = (await API.get('/url/')).data
+      shorteneds.value = (await API.get('/url/', {
+        params: {
+          password: password.value.hashed || await sha256(password.value.value)
+        }
+      })).data
+      
+      if (shorteneds.value.status == 401) {
+        alert('Mauvais mot de passe.')
+        password.value.valid = false
+      } else if (!password.value.valid) {
+        password.value.hashed = await sha256(password.value.value)
+        password.value.valid = true
+      }
 
     }
-    fetch()
 
     async function addShortened() {
 
       adding.value = true
-      
-      try {
-        await API.post(`/url/${addShort.value}`, { dest: addUrl.value })
+
+      const r = await API.post(`/url/${addShort.value}`, { dest: addUrl.value, password: password.value.hashed })
+      if (r.status == 200) {
         addShort.value = ""
         addUrl.value = ""
         fetch()
-      } catch(e) {
-        alert(`Erreur lors de l'ajout : ${e}`)
-      } finally {
-        adding.value = false
+      } else {
+        alert(`Erreur lors de l'ajout : ${r.data.error}`)
       }
+      adding.value = false
       
     }
 
     async function removeShortened() {
 
       try {
-        await API.delete(`/url/${selectedDisplay.value.shortened}`)
+        await API.delete(`/url/${selectedDisplay.value.shortened}`, {
+          params: {
+            password: password.value.hashed
+          }
+        })
         selectedDisplay.value = ''
         fetch()
       } catch(e) {
@@ -77,6 +101,12 @@ export default {
       }
 
     }
+
+    let password = ref({
+      valid: false,
+      value: "",
+      hashed: null
+    })
 
     return {
       shorteneds,
@@ -86,6 +116,8 @@ export default {
       addShortened,
       removeShortened,
       adding,
+      password,
+      fetch,
     }
   }
 }
