@@ -5,7 +5,7 @@ module.exports = (app) => {
     
         .get(async (req, res, next) => {
 
-            if (!req.body?.password || app.utils.sha256(req.body.password) != app.config.password) return res.status(401).send({ status: 401, error: "Authentication error." })
+            if (!req.params?.password || req.params.password != app.config.password) return res.status(401).send({ status: 401, error: "Authentication error." })
 
             const results = await app.db.collection('urls').find({}).toArray()
             res.send(results)
