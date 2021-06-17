@@ -18,7 +18,10 @@ export default {
             .then(r => {
                 r = r.data[0]
                 if (!r?.dest) error.value = "Unknow shortcut..."
-                else window.location = r.dest
+                else {
+                    API.post(`/stats/${route.params.url}`)
+                    window.location = r.dest
+                }
             })
             .catch(e => {
                 error.value = e

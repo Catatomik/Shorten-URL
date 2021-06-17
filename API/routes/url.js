@@ -55,6 +55,7 @@ module.exports = (app) => {
             } else {
 
                 try {
+                    await app.db.collection('stats').deleteMany({ shortened: req.params.url })
                     const r = await app.db.collection('urls').deleteOne({ shortened: req.params.url })
                     if (r.deletedCount == 0) throw new Error("No corresponding shortened URL found.")
                     res.status(200).send({ status: 200 })
