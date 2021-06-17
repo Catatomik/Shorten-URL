@@ -5,14 +5,17 @@
         <h1 class="font-sans font-semibold text-xl text-center mb-2">Liste des raccourcis ({{ shorteneds.length }})</h1>
         <div class="flex space-x-4">
           <div class="flex-auto">
-            <select size=15 class="w-max mr-5 inline-block" style="color: black;" v-model="selectedDisplay">
+            <select size=15 class="w-max mr-5 inline-block" style="color: black;" @change="updateSelected" v-model="selectedDisplay">
               <option v-for="url of shorteneds" v-bind:key="url" :value="url">{{ url.shortened }}</option>
             </select>
           </div>
           <div class="flex-auto rounded-md bg-blue-300 text-gray-800 p-2">
             <div class="flex-auto my-2">URL personnalisé : <a target="_blank" class="underline" :href="selectedDisplay.shortened">{{ selectedDisplay.shortened }}</a></div>
             <div class="flex-auto my-2">URL cible : <a target="_blank" class="underline" :href="selectedDisplay.dest">{{ selectedDisplay.dest }}</a></div>
-            <button type="button" class="px-2 shadow-md rounded-md bg-red-300" :disabled="!selectedDisplay.shortened" @click="removeShortened">Supprimer</button>
+            <button type="button" class="px-2 shadow-md rounded-md bg-red-300 my-2" :disabled="!selectedDisplay.shortened" @click="removeShortened">Supprimer</button>
+            <div v-if="selectedDisplay.stats" class="flex-auto my-2">Nombre de clics : {{ selectedDisplay.stats.length }}</div>
+            <div v-if="selectedDisplay.stats" class="flex-auto my-2">Nombre de clics des dernières 24h : {{ selectedDisplay.stats.filter(s => s.date >= Date.now()-24*3600*1000).length }}</div>
+            <button v-if="selectedDisplay.stats?.length" type="button" class="px-2 shadow-md rounded-md bg-red-200 my-2" :disabled="!selectedDisplay.shortened" @click="resetStatsSelected">Réinitialiser</button>
           </div>
         </div>
         </div>
@@ -108,6 +111,31 @@ export default {
       hashed: null
     })
 
+    async function updateSelected() {
+      
+      selectedDisplay.value.stats = (await API.get(`/stats/${selectedDisplay.value.shortened}`, {
+        params: {
+          password: password.value.hashed
+        }
+      })).data
+
+    }
+
+    async function resetStatsSelected() {
+
+      try {
+        await API.delete(`/stats/${selectedDisplay.value.shortened}`, {
+          params: {
+            password: password.value.hashed
+          }
+        })
+        updateSelected()
+      } catch(e) {
+        alert(`Erreur lors de la réinitialisation : ${e}`)
+      }
+
+    }
+
     return {
       shorteneds,
       addShort,
@@ -118,6 +146,8 @@ export default {
       adding,
       password,
       fetch,
+      updateSelected,
+      resetStatsSelected,
     }
   }
 }
