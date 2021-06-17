@@ -6,6 +6,8 @@ var cors = require('cors')
 
 const config = require('../config.json').API
 const app = express()
+app.config = config
+app.utils = require('./utils')
 app.use(cors())
 app.use(
     express.urlencoded({
@@ -13,7 +15,7 @@ app.use(
     })
   )
 app.use(express.json())
-app.use((req, res, next) => {
+app.use((req, _, next) => {
     console.info(`[${(new Date()).toLocaleString("FR-fr")}] Treating request ${req.method} "${req.originalUrl}".`)
     next()
 })
