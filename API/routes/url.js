@@ -3,7 +3,7 @@ const router = require("express").Router()
 module.exports = (app) => {
     router.route("/")
     
-        .get(async (_, res, next) => {
+        .get(async (req, res, next) => {
 
             if (!req.body?.password || app.utils.sha256(req.body.password) != app.config.password) return res.status(401).send({ status: 401, error: "Authentication error." })
 
