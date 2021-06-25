@@ -155,6 +155,15 @@ export default {
 
 <style>
 @import url("https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css");
+html, body {
+  background-color: #2F3136 !important;
+  color: #EAEAEA !important;
+}
+#app {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 input, select, textarea{
     color: #000000;
 }
