@@ -6,8 +6,6 @@
         "cert": "",
         "database": {
             "url": "",
-            "username": "",
-            "password": ""
         }
         "password": ""
     }

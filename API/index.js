@@ -1,7 +1,7 @@
 const express = require("express")
 const fs = require('fs');
 const https = require('https');
-const MongoClient = require('mongodb').MongoClient;
+const { MongoClient } = require('mongodb');
 var cors = require('cors')
 
 const config = require('../config.json').API
@@ -21,20 +21,14 @@ app.use((req, _, next) => {
 })
 require('./routes')(app)
 
-MongoClient.connect(config.database.url, {
-    options: {
-        auth: {
-            user: config.database.username,
-            password: config.database.password
-        }
-    }
-}, (err, client) => {
-    if (err) throw err
+const client = new MongoClient(config.database.url)
+client.connect().then((client) => {
     app.client = client
     app.db = client.db()
     app.db.createIndex("urls", { shortened: "text" }, { unique: true })
     console.log("Database connected.")
-});
+})
+
 
 const opts = {
    key: fs.readFileSync(config.key),
