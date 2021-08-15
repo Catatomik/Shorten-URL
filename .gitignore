@@ -3,3 +3,4 @@
 config.json
 launch.json
 */dist
+package-lock.json
