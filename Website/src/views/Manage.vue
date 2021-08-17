@@ -31,7 +31,7 @@
     <div v-else class="flex items-center justify-center h-screen">
       <div class="rounded-md bg-blue-300 text-gray-800 p-5">
         <div class="block">
-          <div class="my-2">Mot de passe : <input type="password"  size=15 class="rounded-sm px-1 text-dark-800" v-model="password.value"/></div>
+          <div class="my-2">Mot de passe : <input type="password" size=15 class="rounded-sm px-1 text-dark-800" v-model="password.value" @keyup.enter="fetch"/></div>
           <button type="button" class="px-2 shadow-md rounded-md bg-opacity-50 bg-blue-700" :disabled="password.valid" @click="fetch">Valider</button>
         </div>
       </div>
