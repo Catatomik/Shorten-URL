@@ -1,6 +1,6 @@
 */node_modules
 */package-lock.json
-config.json
+/config.json
 launch.json
 */dist
 package-lock.json
