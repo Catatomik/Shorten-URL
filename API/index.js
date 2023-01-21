@@ -29,5 +29,5 @@ client.connect().then((client) => {
   require('./routes')(app);
 });
 
-http.createServer(opts, app).listen(config.port, config.host + config.suffix);
-console.log(`Server started and listening on https://${config.host}:${config.port}${config.suffix}.`)
+http.createServer(opts, app).listen(config.port, config.host);
+console.log(`Server started and listening on https://${config.host}:${config.port}.`)
