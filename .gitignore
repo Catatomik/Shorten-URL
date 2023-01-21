@@ -1,6 +1,5 @@
 */node_modules
-*/package-lock.json
 /config.json
-launch.json
+.vscode/
 */dist
-package-lock.json
+Website/src/store/config.json
