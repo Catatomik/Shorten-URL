@@ -15,7 +15,7 @@ const routes = [
   {
     path: '/manage-shortened-urls',
     name: 'Gestion des raccourcis',
-    component: () => import('../views/Manage.vue')
+    component: () => import('../views/ManagePanel.vue')
   },
 ]
 
