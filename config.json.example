@@ -2,8 +2,6 @@
     "API": {
         "port": 3000,
         "host": "localhost",
-        "key": "",
-        "cert": "",
         "database": {
             "url": "",
         }
