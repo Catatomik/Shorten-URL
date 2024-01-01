@@ -13,6 +13,7 @@ updates:
     assignees:
       - Catatomik
     versioning-strategy: increase
+    target-branch: "dev"
   - package-ecosystem: npm
     directory: "/Website"
     schedule:
@@ -21,3 +22,4 @@ updates:
     assignees:
       - Catatomik
     versioning-strategy: increase
+    target-branch: "dev"
