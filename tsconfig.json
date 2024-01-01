@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "composite": true
+  },
+  "files": ["config.json"]
+}
