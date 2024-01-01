@@ -2,7 +2,7 @@ import http from "http";
 import express from "express";
 import cors from "cors";
 import { MongoClient } from "mongodb";
-import { App } from "../app";
+import { App } from "./app";
 
 import { API as config } from "../../config.json";
 import utils from "./utils";

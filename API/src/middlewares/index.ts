@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { App } from "../../app";
+import { App } from "../app";
 
 const logReq = ((req, _: unknown, next) => {
   console.info(
