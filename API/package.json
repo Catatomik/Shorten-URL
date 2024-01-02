@@ -2,17 +2,19 @@
   "name": "shorten-url-api",
   "version": "2.0.0",
   "description": "",
-  "main": "built/main.js",
+  "main": "built/main",
   "scripts": {
     "build": "tsc",
     "type-check": "tsc -noEmit",
     "lint": "eslint ./src/ --ext .ts,.tsx,.cts,.mts --fix --ignore-path ../.gitignore",
     "full-lint": "npm run lint & npm run type-check",
     "prettier": "prettier \"**/*.{js,ts}\" --write",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "npm run build"
   },
   "author": "Catatomik",
   "license": "ISC",
+  "files": ["built/**/*.d.ts"],
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.18.2",
