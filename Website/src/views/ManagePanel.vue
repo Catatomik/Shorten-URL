@@ -197,11 +197,11 @@ body {
 input,
 select,
 textarea {
-  color: #000000;
+  @apply text-black;
 }
 
 textarea:focus,
 input:focus {
-  color: #000000;
+  @apply text-black;
 }
 </style>
