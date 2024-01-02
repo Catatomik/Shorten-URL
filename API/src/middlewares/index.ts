@@ -6,7 +6,7 @@ const logReq = ((req, res, next) => {
 
   res.on("finish", () => {
     console.info(
-      `[${new Date().toLocaleString("FR-fr")} (${(performance.now() - initialTs).toFixed(2)}ms})] ${
+      `[${new Date().toLocaleString("FR-fr")} (${(performance.now() - initialTs).toFixed(2)}ms)] ${
         req.method
       } "${req.originalUrl}".`,
     );
