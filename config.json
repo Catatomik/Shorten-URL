@@ -1,0 +1,10 @@
+{
+    "API": {
+        "port": 3000,
+        "host": "localhost",
+        "database": {
+            "url": "mongodb://127.0.0.1:27017/shortenurl"
+        },
+        "password": "test"
+    }
+}
