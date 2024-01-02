@@ -3,3 +3,4 @@
 .vscode/
 */dist
 Website/src/store/config.json
+*.tsbuildinfo
