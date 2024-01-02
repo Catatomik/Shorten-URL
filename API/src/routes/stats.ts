@@ -3,8 +3,8 @@ export interface Stat {
   date: number;
 }
 
-import { Router } from "express";
-import { RouteRegister } from "./route";
+import { Response, Router } from "express";
+import { ErrorResponse, RouteRegister, SuccessResponse } from ".";
 import { App } from "../app";
 const router = Router();
 
@@ -14,7 +14,7 @@ export default ((app: App) => {
   router
     .route("/")
 
-    .get(async (req, res, next) => {
+    .get(async (req, res: Response<Stat[] | ErrorResponse>, next) => {
       if (!req.query?.password || req.query.password != app.config.password) {
         res.status(401).send({ status: 401, error: "Authentication error." });
         next();
@@ -28,7 +28,7 @@ export default ((app: App) => {
   router
     .route("/:url")
 
-    .get(async (req, res, next) => {
+    .get(async (req, res: Response<Stat[] | ErrorResponse>, next) => {
       if (!req.query?.password || req.query.password != app.config.password) {
         res.status(401).send({ status: 401, error: "Authentication error." });
         next();
@@ -39,7 +39,7 @@ export default ((app: App) => {
       }
     })
 
-    .post(async (req, res, next) => {
+    .post(async (req, res: Response<SuccessResponse | ErrorResponse>, next) => {
       try {
         const results = await app.db.collection("urls").find({ shortened: req.params.url }).toArray();
         if (!results.length) throw new Error("No corresponding shortened link.");
@@ -49,12 +49,12 @@ export default ((app: App) => {
         });
         res.status(200).send({ status: 200 });
       } catch (e) {
-        res.status(500).send({ status: 500, error: e });
+        res.status(500).send({ status: 500, error: e as object });
       }
       next();
     })
 
-    .delete(async (req, res, next) => {
+    .delete(async (req, res: Response<SuccessResponse | ErrorResponse>, next) => {
       if (!req.query?.password || req.query.password != app.config.password) {
         res.status(401).send({ status: 401, error: "Authentication error." });
         next();
@@ -64,7 +64,7 @@ export default ((app: App) => {
           if (r.deletedCount == 0) throw new Error("No corresponding shortened URL found.");
           res.status(200).send({ status: 200 });
         } catch (e) {
-          res.status(500).send({ status: 500, error: e });
+          res.status(500).send({ status: 500, error: e as object });
         }
         next();
       }

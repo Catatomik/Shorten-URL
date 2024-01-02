@@ -3,8 +3,8 @@ export interface URL {
   dest: string;
 }
 
-import { Router } from "express";
-import { RouteRegister } from "./route";
+import { Response, Router } from "express";
+import { ErrorResponse, RouteRegister, SuccessResponse } from ".";
 import { App } from "../app";
 import { Stat } from "./stats";
 const router = Router();
@@ -15,7 +15,7 @@ export default ((app: App) => {
   router
     .route("/")
 
-    .get(async (req, res, next) => {
+    .get(async (req, res: Response<URL[] | ErrorResponse>, next) => {
       if (!req.query?.password || req.query.password != app.config.password) {
         res.status(401).send({ status: 401, error: "Authentication error." });
         next();
@@ -29,13 +29,13 @@ export default ((app: App) => {
   router
     .route("/:url")
 
-    .get(async (req, res, next) => {
+    .get(async (req, res: Response<URL[] | ErrorResponse>, next) => {
       const results = await urls.find({ shortened: req.params.url }).toArray();
       res.send(results);
       next();
     })
 
-    .post(async (req, res, next) => {
+    .post(async (req, res: Response<SuccessResponse | ErrorResponse>, next) => {
       if (!req.body?.password || req.body.password != app.config.password) {
         res.status(401).send({ status: 401, error: "Authentication error." });
         next();
@@ -48,13 +48,13 @@ export default ((app: App) => {
           });
           res.status(200).send({ status: 200 });
         } catch (e) {
-          res.status(500).send({ status: 500, error: e });
+          res.status(500).send({ status: 500, error: e as object });
         }
         next();
       }
     })
 
-    .delete(async (req, res, next) => {
+    .delete(async (req, res: Response<SuccessResponse | ErrorResponse>, next) => {
       if (!req.query?.password || req.query.password != app.config.password) {
         res.status(401).send({ status: 401, error: "Authentication error." });
         next();
@@ -65,7 +65,7 @@ export default ((app: App) => {
           if (r.deletedCount == 0) throw new Error("No corresponding shortened URL found.");
           res.status(200).send({ status: 200 });
         } catch (e) {
-          res.status(500).send({ status: 500, error: e });
+          res.status(500).send({ status: 500, error: e as object });
         }
         next();
       }
