@@ -1,8 +1,16 @@
+export interface Stat {
+  shortened: string;
+  date: number;
+}
+
 import { Router } from "express";
 import { RouteRegister } from "./route";
+import { App } from "../app";
 const router = Router();
 
-export default ((app) => {
+export default ((app: App) => {
+  const stats = app.db.collection<Stat>("stats");
+
   router
     .route("/")
 
@@ -11,7 +19,7 @@ export default ((app) => {
         res.status(401).send({ status: 401, error: "Authentication error." });
         next();
       } else {
-        const results = await app.db.collection("stats").find({}).toArray();
+        const results = await stats.find({}).toArray();
         res.send(results);
         next();
       }
@@ -25,7 +33,7 @@ export default ((app) => {
         res.status(401).send({ status: 401, error: "Authentication error." });
         next();
       } else {
-        const results = await app.db.collection("stats").find({ shortened: req.params.url }).toArray();
+        const results = await stats.find({ shortened: req.params.url }).toArray();
         res.send(results);
         next();
       }
@@ -35,7 +43,7 @@ export default ((app) => {
       try {
         const results = await app.db.collection("urls").find({ shortened: req.params.url }).toArray();
         if (!results.length) throw new Error("No corresponding shortened link.");
-        await app.db.collection("stats").insertOne({
+        await stats.insertOne({
           shortened: req.params.url,
           date: Date.now(),
         });
@@ -52,7 +60,7 @@ export default ((app) => {
         next();
       } else {
         try {
-          const r = await app.db.collection("stats").deleteMany({ shortened: req.params.url });
+          const r = await stats.deleteMany({ shortened: req.params.url });
           if (r.deletedCount == 0) throw new Error("No corresponding shortened URL found.");
           res.status(200).send({ status: 200 });
         } catch (e) {
@@ -62,8 +70,5 @@ export default ((app) => {
       }
     });
 
-  return {
-    router,
-    basePath: "/stats",
-  };
+  app.express.use("/stats", router);
 }) satisfies RouteRegister;
