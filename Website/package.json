@@ -15,7 +15,7 @@
   "dependencies": {
     "axios": "^1.6.4",
     "shorten-url-api": "file:../API",
-    "vue": "^3.4.5",
+    "vue": "^3.4.10",
     "vue-router": "^4.2.5"
   },
   "devDependencies": {
