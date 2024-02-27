@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRoute } from "vue-router";
-import { URL } from "shorten-url-api/built/routes/url";
-import { ErrorResponse } from "shorten-url-api/built/routes";
+import type { URL } from "shorten-url-api/built/routes/url";
+import type { ErrorResponse } from "shorten-url-api/built/routes";
 import { API } from "../store";
 
 const error = ref("");

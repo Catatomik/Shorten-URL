@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { URL } from "shorten-url-api/built/routes/url";
+/* __placeholder__ */
+import type { URL } from "shorten-url-api/built/routes/url";
 import { password, fetch, sha256 } from "@/store/auth";
 
 const emit = defineEmits<{

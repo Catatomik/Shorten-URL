@@ -1,6 +1,6 @@
 import { ref } from "vue";
-import { URL } from "shorten-url-api/built/routes/url";
-import { ErrorResponse } from "shorten-url-api/built/routes/";
+import type { URL } from "shorten-url-api/built/routes/url";
+import type { ErrorResponse } from "shorten-url-api/built/routes/";
 import { API } from ".";
 
 interface Password {
