@@ -17,6 +17,6 @@ export default function registerRoutes(app: App) {
   for (const file of files) {
     if (!file.endsWith(".js") || file == "index.js") continue;
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    (require(`./${file}`).default as RouteRegister)(app);
+    (require(`./${file}`) as { default: RouteRegister }).default(app);
   }
 }

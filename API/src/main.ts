@@ -10,22 +10,25 @@ import registerMiddlewares from "./middlewares";
 import registerRoutes from "./routes";
 
 const client = new MongoClient(config.database.url);
-client.connect().then((client) => {
-  const db = client.db();
-  db.createIndex("urls", { shortened: "text" }, { unique: true });
-  console.log("Database connected.");
+client
+  .connect()
+  .then((client) => {
+    const db = client.db();
+    void db.createIndex("urls", { shortened: "text" }, { unique: true });
+    console.log("Database connected.");
 
-  const app: App = { express: express(), config, utils, mongoClient: client, db };
-  app.express.use(cors());
-  app.express.use(
-    express.urlencoded({
-      extended: true,
-    }),
-  );
-  app.express.use(express.json());
-  registerMiddlewares(app);
-  registerRoutes(app);
+    const app: App = { express: express(), config, utils, mongoClient: client, db };
+    app.express.use(cors());
+    app.express.use(
+      express.urlencoded({
+        extended: true,
+      }),
+    );
+    app.express.use(express.json());
+    registerMiddlewares(app);
+    registerRoutes(app);
 
-  http.createServer(app.express).listen(config.port, config.host);
-  console.log(`Server started and listening on https://${config.host}:${config.port}.`);
-});
+    http.createServer(app.express).listen(config.port, config.host);
+    console.log(`Server started and listening on https://${config.host}:${config.port}.`);
+  })
+  .catch(() => console.error("Unable to connect DB"));

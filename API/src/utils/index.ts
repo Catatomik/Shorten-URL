@@ -6,4 +6,10 @@ async function sha256(message: string) {
   return hashHex;
 }
 
+function hasAttribute<A extends string>(obj: unknown, attr: A): obj is { [key in A]: unknown } {
+  return typeof obj === "object" && obj !== null && attr in obj;
+}
+
 export default { sha256 };
+
+export { hasAttribute };

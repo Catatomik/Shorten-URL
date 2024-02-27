@@ -1,11 +1,20 @@
 import { Express } from "express";
 import { MongoClient, Db } from "mongodb";
-import { API } from "../../config.json";
+import type { API } from "../../config.json";
 import utils from "./utils";
+
+interface APIConfig extends API {
+  port: number;
+  host: string;
+  database: {
+    url: string;
+  };
+  password: string;
+}
 
 export interface App {
   express: Express;
-  config: API;
+  config: APIConfig;
   utils: utils;
   mongoClient: MongoClient;
   db: Db;
