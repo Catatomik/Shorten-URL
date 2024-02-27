@@ -4,6 +4,7 @@
 name: Build API
 
 on:
+  workflow_dispatch:
   push:
     branches-ignore:
       - "dev"
