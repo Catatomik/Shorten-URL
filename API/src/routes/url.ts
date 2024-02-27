@@ -8,6 +8,7 @@ import { ErrorResponse, RouteRegister, SuccessResponse } from ".";
 import { App } from "../app";
 import { Stat } from "./stats";
 const router = Router();
+import { hasAttribute } from "../utils";
 
 export default ((app: App) => {
   const urls = app.db.collection<URL>("urls");
@@ -15,32 +16,42 @@ export default ((app: App) => {
   router
     .route("/")
 
-    .get(async (req, res: Response<URL[] | ErrorResponse>, next) => {
+    .get((req, res: Response<URL[] | ErrorResponse>, next) => {
       if (!req.query?.password || req.query.password != app.config.password) {
         res.status(401).send({ status: 401, error: "Authentication error." });
         next();
       } else {
-        const results = await urls.find({}).toArray();
-        res.send(results);
-        next();
+        void urls
+          .find({})
+          .toArray()
+          .then((results) => {
+            res.send(results);
+            next();
+          });
       }
     });
 
   router
     .route("/:url")
 
-    .get(async (req, res: Response<URL[] | ErrorResponse>, next) => {
-      const results = await urls.find({ shortened: req.params.url }).toArray();
-      res.send(results);
-      next();
+    .get((req, res: Response<URL[] | ErrorResponse>, next) => {
+      void urls
+        .find({ shortened: req.params.url })
+        .toArray()
+        .then((results) => {
+          res.send(results);
+          next();
+        });
     })
 
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     .post(async (req, res: Response<SuccessResponse | ErrorResponse>, next) => {
-      if (!req.body?.password || req.body.password != app.config.password) {
+      if (!hasAttribute(req.body, "password") || req.body.password != app.config.password) {
         res.status(401).send({ status: 401, error: "Authentication error." });
         next();
       } else {
-        if (!req.body?.dest) return res.status(400).send({ status: 400, error: "No destination provided." });
+        if (!hasAttribute(req.body, "dest") || typeof req.body.dest !== "string")
+          return res.status(400).send({ status: 400, error: "No destination provided." });
         try {
           await urls.insertOne({
             shortened: req.params.url,
@@ -54,6 +65,7 @@ export default ((app: App) => {
       }
     })
 
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     .delete(async (req, res: Response<SuccessResponse | ErrorResponse>, next) => {
       if (!req.query?.password || req.query.password != app.config.password) {
         res.status(401).send({ status: 401, error: "Authentication error." });

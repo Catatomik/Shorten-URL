@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { URL } from "shorten-url-api/built/routes/url";
-import { Stat } from "shorten-url-api/built/routes/stats";
+import type { URL } from "shorten-url-api/built/routes/url";
+import type { Stat } from "shorten-url-api/built/routes/stats";
 import { API } from "@/store";
 import Auth from "@/components/AuthFetch.vue";
 import { password, fetch } from "@/store/auth";
-import { ErrorResponse, SuccessResponse } from "shorten-url-api/built/routes";
+import type { ErrorResponse, SuccessResponse } from "shorten-url-api/built/routes";
 
 const shorteneds = ref<URL[]>([]);
 

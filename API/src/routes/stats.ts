@@ -14,31 +14,40 @@ export default ((app: App) => {
   router
     .route("/")
 
-    .get(async (req, res: Response<Stat[] | ErrorResponse>, next) => {
+    .get((req, res: Response<Stat[] | ErrorResponse>, next) => {
       if (!req.query?.password || req.query.password != app.config.password) {
         res.status(401).send({ status: 401, error: "Authentication error." });
         next();
       } else {
-        const results = await stats.find({}).toArray();
-        res.send(results);
-        next();
+        void stats
+          .find({})
+          .toArray()
+          .then((results) => {
+            res.send(results);
+            next();
+          });
       }
     });
 
   router
     .route("/:url")
 
-    .get(async (req, res: Response<Stat[] | ErrorResponse>, next) => {
+    .get((req, res: Response<Stat[] | ErrorResponse>, next) => {
       if (!req.query?.password || req.query.password != app.config.password) {
         res.status(401).send({ status: 401, error: "Authentication error." });
         next();
       } else {
-        const results = await stats.find({ shortened: req.params.url }).toArray();
-        res.send(results);
-        next();
+        void stats
+          .find({ shortened: req.params.url })
+          .toArray()
+          .then((results) => {
+            res.send(results);
+            next();
+          });
       }
     })
 
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     .post(async (req, res: Response<SuccessResponse | ErrorResponse>, next) => {
       try {
         const results = await app.db.collection("urls").find({ shortened: req.params.url }).toArray();
@@ -54,6 +63,7 @@ export default ((app: App) => {
       next();
     })
 
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     .delete(async (req, res: Response<SuccessResponse | ErrorResponse>, next) => {
       if (!req.query?.password || req.query.password != app.config.password) {
         res.status(401).send({ status: 401, error: "Authentication error." });
