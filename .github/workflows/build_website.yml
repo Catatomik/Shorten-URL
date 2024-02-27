@@ -15,7 +15,6 @@ on:
       - "master"
     paths:
       - "Website/*"
-  workflow_dispatch:
 
 jobs:
   build:
