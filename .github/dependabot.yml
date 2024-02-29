@@ -6,19 +6,10 @@
 version: 2
 updates:
   - package-ecosystem: npm
-    directory: "/API"
+    directory: "/"
     schedule:
       interval: daily
-    open-pull-requests-limit: 99
-    assignees:
-      - Catatomik
-    versioning-strategy: increase
-    target-branch: "dev"
-  - package-ecosystem: npm
-    directory: "/Website"
-    schedule:
-      interval: daily
-    open-pull-requests-limit: 99
+    open-pull-requests-limit: 50
     assignees:
       - Catatomik
     versioning-strategy: increase
