@@ -14,7 +14,7 @@
     "prettier": "npx prettier \"**/*.{js,ts,vue,html}\" --write"
   },
   "dependencies": {
-    "axios": "^1.6.8",
+    "axios": "^1.7.0",
     "shorten-url-api": "link:../API",
     "vue": "^3.4.23",
     "vue-router": "^4.3.2"
