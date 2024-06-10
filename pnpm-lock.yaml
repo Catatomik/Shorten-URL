@@ -65,7 +65,7 @@ importers:
         version: 20.12.13
       '@vitejs/plugin-vue':
         specifier: ^5.0.4
-        version: 5.0.4(vite@5.2.12)(vue@3.4.27)
+        version: 5.0.4(vite@5.2.13)(vue@3.4.27)
       '@vue/eslint-config-prettier':
         specifier: ^9.0.0
         version: 9.0.0(eslint@9.4.0)(prettier@3.2.5)
@@ -100,8 +100,8 @@ importers:
         specifier: ^5.4.5
         version: 5.4.5
       vite:
-        specifier: ^5.2.12
-        version: 5.2.12(@types/node@20.12.13)
+        specifier: ^5.2.13
+        version: 5.2.13(@types/node@20.12.13)
       vue-tsc:
         specifier: ^2.0.19
         version: 2.0.19(typescript@5.4.5)
@@ -958,14 +958,14 @@ packages:
       eslint-visitor-keys: 3.4.3
     dev: true
 
-  /@vitejs/plugin-vue@5.0.4(vite@5.2.12)(vue@3.4.27):
+  /@vitejs/plugin-vue@5.0.4(vite@5.2.13)(vue@3.4.27):
     resolution: {integrity: sha512-WS3hevEszI6CEVEx28F8RjTX97k3KsrcY6kvTg7+Whm5y3oYvcqzVeGCU3hxSAn4uY2CLCkeokkGKpoctccilQ==}
     engines: {node: ^18.0.0 || >=20.0.0}
     peerDependencies:
       vite: ^5.0.0
       vue: ^3.2.25
     dependencies:
-      vite: 5.2.12(@types/node@20.12.13)
+      vite: 5.2.13(@types/node@20.12.13)
       vue: 3.4.27(typescript@5.4.5)
     dev: true
 
@@ -3090,8 +3090,8 @@ packages:
     engines: {node: '>= 0.8'}
     dev: false
 
-  /vite@5.2.12(@types/node@20.12.13):
-    resolution: {integrity: sha512-/gC8GxzxMK5ntBwb48pR32GGhENnjtY30G4A0jemunsBkiEZFw60s8InGpN8gkhHEkjnRK1aSAxeQgwvFhUHAA==}
+  /vite@5.2.13(@types/node@20.12.13):
+    resolution: {integrity: sha512-SSq1noJfY9pR3I1TUENL3rQYDQCFqgD+lM6fTRAM8Nv6Lsg5hDLaXkjETVeBt+7vZBCMoibD+6IWnT2mJ+Zb/A==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
