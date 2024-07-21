@@ -2,7 +2,7 @@ import { Response, Router } from "express";
 import { Route, RouteRegister } from "../register";
 import { App } from "../../app";
 import { CustomError, hasAttribute } from "../../utils";
-import { Stat, URL } from "../../models/DB";
+import { Stat, URL } from "../../models";
 import { requirePassword } from "../../middlewares";
 
 const router = Router();

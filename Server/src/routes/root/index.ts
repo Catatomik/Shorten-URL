@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { Route, RouteRegister } from "../register";
 import { App } from "../../app";
-import { Stat, URL } from "../../models/DB";
+import { Stat, URL } from "../../models";
 import { CustomError } from "../../utils";
 
 const router = Router();

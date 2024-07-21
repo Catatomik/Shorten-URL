@@ -1,7 +1,7 @@
 import { Response, Router } from "express";
 import { Route, RouteRegister } from "../register";
 import { App } from "../../app";
-import { Stat } from "../../models/DB";
+import { Stat } from "../../models";
 import { requirePassword } from "../../middlewares";
 import { CustomError } from "../../utils";
 
