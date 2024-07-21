@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { shorteneds } from "@/store";
 import { password, auth } from "@/store/auth";
 import { ref } from "vue";
 
@@ -9,10 +10,12 @@ const emit = defineEmits<{
 }>();
 
 async function tryAuth() {
-  const shorteneds = await auth();
+  const ret = await auth();
 
-  if (shorteneds)
-    emit("authenticated", shorteneds);
+  if (ret) {
+    shorteneds.value = ret;
+    emit("authenticated", ret);
+  }
 }
 </script>
 
@@ -23,12 +26,19 @@ async function tryAuth() {
         <div class="my-2" :disabled="password.valid">
           Mot de passe :
           <input
-v-model="password.value" type="password" size="15" class="rounded-sm px-1 text-dark-800"
-            @keyup.enter="validateButton?.click()" />
+            v-model="password.value"
+            type="password"
+            size="15"
+            class="rounded-sm px-1 text-dark-800"
+            @keyup.enter="validateButton?.click()"
+          />
         </div>
         <button
-ref="validateButton" type="button" class="px-2 shadow-md rounded-md bg-opacity-50 bg-blue-700"
-          @click="tryAuth">
+          ref="validateButton"
+          type="button"
+          class="px-2 shadow-md rounded-md bg-opacity-50 bg-blue-700"
+          @click="tryAuth"
+        >
           Valider
         </button>
       </div>
