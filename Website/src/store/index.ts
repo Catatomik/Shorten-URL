@@ -1,6 +1,8 @@
 import axios from "axios";
 import { APIHost } from "./config.json";
 import { password } from "./auth";
+import { ref } from "vue";
+import type { URL } from "shorten-url-api/built/models";
 
 const API = axios.create({
   baseURL: APIHost,
@@ -19,4 +21,6 @@ function fetch<R = unknown>(path: string, overridePassword?: string) {
   });
 }
 
-export { API, fetch };
+const shorteneds = ref<URL[]>([]);
+
+export { API, fetch, shorteneds };

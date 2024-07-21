@@ -10,7 +10,7 @@ const shorteneds = ref<URL[]>([]);
 
 <template>
   <AuthModal v-if="!password.valid" />
-  <ManagePanel v-else :shorteneds="shorteneds" />
+  <ManagePanel v-else" />
 </template>
 
 <style></style>
