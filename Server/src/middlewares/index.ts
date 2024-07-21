@@ -19,7 +19,7 @@ const logReq = ((req, res, next) => {
 const requirePassword = (app: App) =>
   ((req: Request, res: Response, next: NextFunction) => {
     if (
-      (!hasAttribute(req.body, "password") || req.query.password != app.config.password) &&
+      (!hasAttribute(req.body, "password") || req.body.password != app.config.password) &&
       (!hasAttribute(req.query, "password") || req.query.password != app.config.password)
     ) {
       res.status(401).send("Authentication error");
