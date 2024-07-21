@@ -1,7 +1,6 @@
 import { ref } from "vue";
-import type { URL } from "shorten-url-api/built/routes/url";
-import type { ErrorResponse } from "shorten-url-api/built/routes/";
-import { API } from ".";
+import type { URL } from "shorten-url-api/built/models";
+import { fetch } from ".";
 
 interface Password {
   valid: boolean;
@@ -23,25 +22,25 @@ async function sha256(message: string) {
   return hashHex;
 }
 
-async function fetch(): Promise<URL[] | null> {
-  const shorteneds = (
-    await API.get<URL[] | ErrorResponse>("/url/", {
-      params: {
-        password: password.value.hashed || (await sha256(password.value.value)),
-      },
-    })
-  ).data;
+async function auth(): Promise<URL[] | null> {
+  const hashed = await sha256(password.value.value);
+  const shorteneds = await fetch<URL[]>("/url/", hashed);
 
-  if ("error" in shorteneds) {
+  if (shorteneds.status !== 200) {
     if (shorteneds.status === 401) {
       alert("Mauvais mot de passe.");
       password.value.valid = false;
+      password.value.hashed = null;
     }
 
     return null;
   }
 
-  return shorteneds;
+  password.value.valid = true;
+  password.value.hashed = hashed;
+  password.value.value = "";
+
+  return shorteneds.data;
 }
 
-export { password, sha256, fetch };
+export { password, auth };

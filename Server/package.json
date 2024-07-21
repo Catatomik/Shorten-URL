@@ -5,10 +5,12 @@
   "main": "built/main",
   "scripts": {
     "build": "tsc",
+    "dev": "TS_NODE=true nodemon src/main.ts",
     "type-check": "tsc -noEmit",
     "lint": "eslint ./src/ --fix",
     "full-lint": "pnpm run lint && pnpm run type-check",
     "prettier": "prettier \"**/*.{js,ts}\" --write",
+    "start": "NODE_ENV=production node built/main.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "pnpm run build"
   },
@@ -20,15 +22,17 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.19.2",
-    "mongodb": "^6.5.0"
+    "mongodb": "^6.8.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
-    "@types/node": "^20.12.7",
-    "eslint": "^9.1.0",
+    "@types/node": "^20.12.13",
+    "eslint": "^9.4.0",
+    "nodemon": "^3.1.4",
     "prettier": "^3.2.5",
+    "ts-node": "^10.9.2",
     "typescript": "^5.4.5",
-    "typescript-eslint": "^7.7.0"
+    "typescript-eslint": "^7.14.1"
   }
 }

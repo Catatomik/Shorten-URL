@@ -10,6 +10,15 @@ function hasAttribute<A extends string>(obj: unknown, attr: A): obj is { [key in
   return typeof obj === "object" && obj !== null && attr in obj;
 }
 
+class CustomError extends Error {
+  public status: number;
+
+  constructor(message: string, httpCode: number) {
+    super(message);
+    this.status = httpCode;
+  }
+}
+
 export default { sha256 };
 
-export { hasAttribute };
+export { hasAttribute, CustomError };
