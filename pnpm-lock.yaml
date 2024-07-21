@@ -8,7 +8,7 @@ importers:
 
   .: {}
 
-  API:
+  Server:
     dependencies:
       cors:
         specifier: ^2.8.5
