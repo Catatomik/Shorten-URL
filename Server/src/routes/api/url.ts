@@ -47,7 +47,7 @@ export default ((app: App) => {
     })
 
     .post((req, res, next) => {
-      if (!hasAttribute(req.body, "dest") || typeof req.body.dest !== "string")
+      if (!hasAttribute(req.body, "dest") || typeof req.body.dest !== "string" || !req.body.dest.length)
         throw new CustomError("No destination provided.", 400);
 
       urls
