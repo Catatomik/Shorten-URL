@@ -7,28 +7,35 @@ import { App } from "./app";
 import { API as config } from "../../config.json";
 import utils from "./utils";
 import registerMiddlewares from "./middlewares";
-import registerRoutes from "./routes";
+import registerRoutes from "./routes/register";
 
-const client = new MongoClient(config.database.url);
-client
-  .connect()
-  .then((client) => {
-    const db = client.db();
-    void db.createIndex("urls", { shortened: "text" }, { unique: true });
-    console.log("Database connected.");
+async function startup() {
+  const client = new MongoClient(config.database.url);
+  try {
+    await client.connect();
+  } catch (e) {
+    throw new Error("Unable to connect DB");
+  }
 
-    const app: App = { express: express(), config, utils, mongoClient: client, db };
-    app.express.use(cors());
-    app.express.use(
-      express.urlencoded({
-        extended: true,
-      }),
-    );
-    app.express.use(express.json());
-    registerMiddlewares(app);
-    registerRoutes(app);
+  const db = client.db();
+  await db.createIndex("urls", { shortened: "text" }, { unique: true });
+  console.log("Database connected.");
 
-    http.createServer(app.express).listen(config.port, config.host);
-    console.log(`Server started and listening on https://${config.host}:${config.port}.`);
-  })
-  .catch(() => console.error("Unable to connect DB"));
+  const app: App = { express: express(), config, utils, mongoClient: client, db };
+  app.express.use(cors());
+  app.express.use(
+    express.urlencoded({
+      extended: true,
+    }),
+  );
+  app.express.use(express.json());
+  registerMiddlewares(app);
+  registerRoutes(app);
+
+  http.createServer(app.express).listen(config.port, config.host);
+  console.log(`Server listening on https://${config.host}:${config.port}.`);
+}
+
+startup()
+  .then(() => console.log("Server started"))
+  .catch((err) => console.error("Cannot start server", err));
