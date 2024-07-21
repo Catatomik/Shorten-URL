@@ -30,7 +30,7 @@
     "@types/node": "^20.12.13",
     "eslint": "^9.4.0",
     "nodemon": "^3.1.4",
-    "prettier": "^3.2.5",
+    "prettier": "^3.3.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5",
     "typescript-eslint": "^7.14.1"
